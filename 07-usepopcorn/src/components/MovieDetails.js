@@ -39,10 +39,10 @@ export default function MovieDetails({ watched, selectedId, onCloseMovie, onAddW
         setError('');
 
         const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`);
-        if(!res.ok) throw new Error('Something went wrong with fetching movie details');
+        if (!res.ok) throw new Error('Something went wrong with fetching movie details');
 
         const data = await res.json();
-        if(data.Error) throw new Error(data.Error);
+        if (data.Error) throw new Error(data.Error);
   
         setMovie(data);
       } catch (error) {
@@ -55,6 +55,26 @@ export default function MovieDetails({ watched, selectedId, onCloseMovie, onAddW
 
     getMovieDetails();
   }, [selectedId]);
+
+  useEffect(function() {
+    if (!Title) return;
+    
+    document.title = `Movie | ${Title}`;
+
+    return function() {
+      document.title = 'usePopcorn';
+    }
+  }, [Title]);
+
+  useEffect(function() {
+    const callback = (e) => e.code === 'Escape' && onCloseMovie();
+
+    document.addEventListener('keydown', callback);
+
+    return function() {
+      document.removeEventListener('keydown', callback);
+    }
+  }, [onCloseMovie]);
 
   return (
     <div className="details">
