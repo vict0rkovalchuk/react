@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import StarRating from './StarRating';
 import Loader from "./Loader";
@@ -11,6 +11,8 @@ export default function MovieDetails({ watched, selectedId, onCloseMovie, onAddW
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [userRating, setUserRating] = useState('');
+
+  const countRef = useRef(0);
 
   const { Title, Year, Poster, Runtime, imdbRating, Plot, Released, Actors, Director, Genre } = movie;
 
@@ -25,12 +27,17 @@ export default function MovieDetails({ watched, selectedId, onCloseMovie, onAddW
       Poster,
       userRating,
       imdbRating: +imdbRating,
-      Runtime: +Runtime.split(' ').at(0)
+      Runtime: +Runtime.split(' ').at(0),
+      countRatingDecisions: countRef.current
     };
       
     onAddWatched(newWatchedMovie);
     onCloseMovie();
   }
+
+  useEffect(function () {
+    userRating && countRef.current++;
+  }, [userRating]);
 
   useEffect(function() {
     async function getMovieDetails() {
