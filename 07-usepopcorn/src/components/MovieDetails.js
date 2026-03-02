@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useKey } from "../hooks/useKey";
 
 import StarRating from './StarRating';
 import Loader from "./Loader";
@@ -73,15 +74,7 @@ export default function MovieDetails({ watched, selectedId, onCloseMovie, onAddW
     }
   }, [Title]);
 
-  useEffect(function() {
-    const callback = (e) => e.code === 'Escape' && onCloseMovie();
-
-    document.addEventListener('keydown', callback);
-
-    return function() {
-      document.removeEventListener('keydown', callback);
-    }
-  }, [onCloseMovie]);
+  useKey('Escape', onCloseMovie);
 
   return (
     <div className="details">

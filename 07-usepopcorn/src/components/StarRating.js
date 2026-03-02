@@ -44,7 +44,7 @@ export default function StarRating({
 
   function handleRating(rating) {
     setRating(rating);
-    onSetRating && onSetRating(rating);
+    onSetRating?.(rating);
   }
 
   function handleMouseEnter(rating) {
